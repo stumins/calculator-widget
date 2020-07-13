@@ -22,41 +22,97 @@ class CalculatorWidget extends React.Component {
         this.state = {
             output: 0,
             input: [],
+            stack: [],
+            lastOperator: ""
         };
+        this.renderButton = this.renderButton.bind(this);
         this.allClear = this.allClear.bind(this);
+        this.pressDecimal = this.pressDecimal.bind(this);
+        this.pressNumber = this.pressNumber.bind(this);
+        this.calcOutput = this.calcOutput.bind(this);
+    }
+    renderButton(id, value, classes, handleClick) {
+        return(
+            <Button 
+                id={id}
+                value={value}
+                classes={classes}
+                onClick={handleClick}
+            />
+        );
     }
     allClear() {
         this.setState({
             output: 0,
-            input: [],
+            input: "",
         });
     }
-
+    pressDecimal() {
+        this.setState((state, props) => {
+            if (state.input.includes(".")) {
+                return { input: state.input }
+            } else if (state.input.length == 0) {
+                // Add leading zero on empty input
+                return { input: state.input.concat("0.") }
+            } else {
+                return { input: state.input.concat(".") }
+            }
+        });
+    }
+    pressNumber(num) {
+        // Only allow a single zero
+        this.setState((state, props) => {
+            if (state.input == "0") {
+                return { input: num }
+            } else {
+                return { input: state.input.concat(num) }
+            }
+        });
+    }
+    /* TODO evaluate math */
+    calcOutput() {
+        // Ignore empty inputs
+        if (this.state.input.length == 0) {
+            return
+        } else {
+            this.setState((state, props) => {
+                // Ignore empty inputs
+                if (state.input.length == 0) {
+                    return { input: "" }
+                } else {
+                    return {
+                        output: state.input,
+                        input: ""
+                    }
+                }
+            });
+        }
+    }
     render() {
+        let display = this.state.input.length == 0 ? this.state.output : this.state.input;
         return(
             <div id="calculator-frame">
                 <div id="display-frame">
-                    <Display value={this.state.output} />
+                    <Display value={display} />
                 </div>
                 <div id="button-grid">
-                    <Button id="clear" value="AC" classes="" onClick={this.allClear} />
-                    <Button id="inverse" value="+/-" classes="operator" onClick={() => {}} />
-                    <Button id="divide" value="/" classes="operator" onClick={() => {}} />
-                    <Button id="seven" value="7" onClick={() => {}} />
-                    <Button id="eight" value="8" onClick={() => {}} />
-                    <Button id="nine" value="9" onClick={() => {}} />
-                    <Button id="multiply" value="*" classes="operator" onClick={() => {}} />
-                    <Button id="four" value="4" onClick={() => {}} />
-                    <Button id="five" value="5" onClick={() => {}} />
-                    <Button id="six" value="6" onClick={() => {}} />
-                    <Button id="subtract" value="-" classes="operator" onClick={() => {}} />
-                    <Button id="one" value="1" onClick={() => {}} />
-                    <Button id="two" value="2" onClick={() => {}} />
-                    <Button id="three" value="3" onClick={() => {}} />
-                    <Button id="add" value="+" classes="operator" onClick={() => {}} />
-                    <Button id="zero" value="0" onClick={() => {}} />
-                    <Button id="decimal" value="." onClick={() => {}} />
-                    <Button id="equals" value="=" onClick={() => {}} />
+                    {this.renderButton("clear","AC", "", this.allClear)}
+                    {this.renderButton("divide","/", "operator", )}
+                    {this.renderButton("multiply","*", "operator", )}  
+                    {this.renderButton("seven", "7", "", () => {this.pressNumber("7")})}
+                    {this.renderButton("eight", "8", "", () => {this.pressNumber("8")})}
+                    {this.renderButton("nine", "9", "", () => {this.pressNumber("9")})}
+                    {this.renderButton("subtract","-", "operator", )}  
+                    {this.renderButton("four", "4", "", () => {this.pressNumber("4")})}
+                    {this.renderButton("five", "5", "", () => {this.pressNumber("5")})}
+                    {this.renderButton("six", "6", "", () => {this.pressNumber("6")})}
+                    {this.renderButton("add","+", "operator", )}
+                    {this.renderButton("one", "1", "", () => {this.pressNumber("1")})}
+                    {this.renderButton("two", "2", "", () => {this.pressNumber("2")})}
+                    {this.renderButton("three", "3", "", () => {this.pressNumber("3")})}
+                    {this.renderButton("equals", "=", "", this.calcOutput)}
+                    {this.renderButton("zero", "0", "", () => {this.pressNumber("0")})}
+                    {this.renderButton("decimal", ".", "", this.pressDecimal)}
                 </div>
             </div>
         );
