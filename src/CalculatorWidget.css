@@ -23,16 +23,32 @@ body {
 
 #display-frame {
     display:flex;
+    flex-direction: column;
     align-items: flex-end;
-    justify-content: flex-end;
     border: black solid 1px;
-    padding: 1.5rem;
+    padding: 0.6em;
     margin-bottom: 0.25rem;
-    font-size: 1.5rem;
     box-shadow: inset 0 0 0.4em;
     border-radius: 7px;
     color: greenyellow;
     background-color: black;
+}
+
+.displays {
+    padding: 0.5em;
+}
+
+#output {
+    display: flex;
+    justify-content: flex-start;
+    font-size: 1em;
+    min-height: 1.25em;
+}
+
+#display {
+    display: flex;
+    align-self: flex-end;
+    font-size: 1.5em;
 }
 
 #button-grid {
