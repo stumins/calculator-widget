@@ -73,8 +73,6 @@ class CalculatorWidget extends React.Component {
         );
     }
     pressButton(symbol) {
-        console.log("buttonpress: ", symbol);
-        console.log("prior state: ", this.state);
         // If the input contains a decimal, ignore decimal presses
         if (symbol == "." && this.state.inputQueue.includes(".")) {
             return
@@ -122,7 +120,6 @@ class CalculatorWidget extends React.Component {
                     return sum;
                 }, 0);
                 let newDisplay;
-                console.log(numOperators);
                 switch (numOperators) {
                     // if last 2 chars are operators, replace both with symbol;
                     case 2:
@@ -234,7 +231,6 @@ class CalculatorWidget extends React.Component {
         // Final part of shunting-yard : move remaining input & operators into output queue to form RPN notation
         // https://en.m.wikipedia.org/wiki/Reverse_Polish_notation
         let RPN = this.state.outputQueue.concat(this.state.inputQueue).concat(this.state.operatorStack);
-        console.log("RPN: ", RPN);
         // Solve RPN for an output
         let stack = [];
         for (let idx in RPN) {
@@ -247,8 +243,6 @@ class CalculatorWidget extends React.Component {
                 let arg2 = stack.shift();
                 let arg1 = stack.shift()
                 let operatorAction = this.operators[symbol].action
-                let val = operatorAction(arg1, arg2);
-                console.log(operatorAction, val, arg1, arg2);
                 stack.unshift(operatorAction(arg1, arg2));
             }
         }
